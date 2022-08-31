@@ -3,9 +3,9 @@
 $servername="localhost";
 $username="root";
 $password="";
-$database="filehandle";
+$database="formhandle";
 
-$con=mysqli_query($servername,$username,$password,$database);
+$con=mysqli_connect($servername,$username,$password,$database);
 
 
 if(isset($_POST['submit'])){
@@ -16,6 +16,28 @@ if(isset($_POST['submit'])){
     $filefname=rand(1000,10000) ."-".$_FILES["file"]["name"];
 
     // Giving Temporary name
+
+    $tname=$_FILES["file"]["tmp_name"];
+
+
+    $uploadfolder='/uploads';
+
+    //Save file to local storage
+
+    move_uploaded_file($tname,$uploadfolder .'/'. $filefname);
+
+
+    // Insert Only File name to the databse
+
+    $sql="INSERT INTO `filetable` ( `type`, `file`) VALUES ( '$filetype', '$filefname')";
+    $result=mysqli_query($con,$sql);
+
+    if($result){
+        echo"Successfully Added file";
+    }
+    else{
+        echo"Failed TO Upload";
+    }
 }
 
 
